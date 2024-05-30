@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MyGraph<T> {
     private final boolean undirected;
@@ -16,27 +13,26 @@ public class MyGraph<T> {
     }
 
     public void addVertex(Vertex<T> v) {
-        if (hasVertex(v))
-            return;
-
-        map.put(v, new LinkedList<>());
+        if (!map.containsKey(v)) {
+            map.put(v, new LinkedList<>());
+        }
     }
 
     public void addEdge(Vertex<T> source, Vertex<T> dest) {
-        if (!hasVertex(source))
+        if (!map.containsKey(source)) {
             addVertex(source);
+        }
 
-        if (!hasVertex(dest))
+        if (!map.containsKey(dest)) {
             addVertex(dest);
+        }
 
-        if (hasEdge(source, dest)
-                || source.equals(dest))
-            return;
-
-        map.get(source).add(dest);
-
-        if (undirected)
-            map.get(dest).add(source);
+        if (!map.get(source).contains(dest) && !source.equals(dest)) {
+            map.get(source).add(dest);
+            if (undirected) {
+                map.get(dest).add(source);
+            }
+        }
     }
 
     public int getVerticesCount() {
@@ -48,10 +44,9 @@ public class MyGraph<T> {
         for (Vertex<T> v : map.keySet()) {
             count += map.get(v).size();
         }
-
-        if (undirected)
+        if (undirected) {
             count /= 2;
-
+        }
         return count;
     }
 
@@ -60,13 +55,11 @@ public class MyGraph<T> {
     }
 
     public boolean hasEdge(Vertex<T> source, Vertex<T> dest) {
-        if (!hasVertex(source)) return false;
+        if (!map.containsKey(source)) return false;
         return map.get(source).contains(dest);
     }
 
     public List<Vertex<T>> adjacencyList(Vertex<T> v) {
-        if (!hasVertex(v)) return null;
-
-        return map.get(v);
+        return map.getOrDefault(v, new LinkedList<>());
     }
 }

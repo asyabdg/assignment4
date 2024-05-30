@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Vertex<T> {
     private T data;
@@ -22,15 +20,16 @@ public class Vertex<T> {
         return adjacentVertices;
     }
 
-    public void add(Vertex<T> dest, Double weight) {
-        adjacentVertices.put(dest, weight);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vertex<?> vertex = (Vertex<?>) o;
         return Objects.equals(data, vertex.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data);
     }
 }
